@@ -10,18 +10,17 @@ namespace VehicleSimulator
 	/// represents a waypoint consisting of a Speed the vehicle 
 	/// and the miles to the next waypoint
 	/// </summary>
-	class WayPoint
+	public class WayPoint
 	{
-		public WayPoint(int speed, int milesToNextWayPoint)
+		public static implicit operator WayPoint(int i)
 		{
-			Speed = speed;
-			MileToNextWayPoint = milesToNextWayPoint;
+			return new WayPoint(i);
 		}
 
-		/// <summary>
-		/// speed the vehicle is going
-		/// </summary>
-		public int Speed {  set;  get; }
+		public WayPoint(int milesToNextWayPoint)
+		{
+			MileToNextWayPoint = milesToNextWayPoint;
+		}
 
 		/// <summary>
 		/// amount of distance until next waypoint

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace VehicleSimulator
@@ -12,7 +13,7 @@ namespace VehicleSimulator
 		[TestMethod]
 		public void GetTimeSpans()
 		{
-			var simulator = new VehicleSimulator.EmitPosition();
+			var simulator = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>());
 
 			for (int i = 0; i <= 75; i++)
 			{
@@ -40,16 +41,34 @@ namespace VehicleSimulator
 		}
 
 		[TestMethod]
-		public void RecieveEmission()
+		public void RunAsTask()
 		{
+			var vehicle = new VehicleSimulator.EmitPosition(27, new List<VehicleSimulator.WayPoint>());
 
-					//create class
-			var vehicle = new VehicleSimulator.EmitPosition();
+			var cancel = new System.Threading.CancellationTokenSource();
 
 			//attach listener
 			var listen = new Listener(vehicle);
 
-			vehicle.Control(56, new System.Threading.CancellationToken());
+			var task = new System.Threading.Tasks.Task(() => vehicle.Control(cancel.Token));
+
+			//if we are done issue cancel
+			cancel.Cancel();
+			task.Wait();
+
+		}
+
+		[TestMethod]
+		public void RecieveEmission()
+		{
+
+			//create class
+			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>());
+
+			//attach listener
+			var listen = new Listener(vehicle);
+
+			vehicle.Control(new System.Threading.CancellationToken());
 
 		
 		}
@@ -70,6 +89,20 @@ namespace VehicleSimulator
 			{
 					System.Diagnostics.Debugger.Log(0, "log", string.Format("{0} Got Coorindates", DateTime.UtcNow));
 			}
+
+		}
+
+		[TestMethod]
+		public void GetMilesTravelled()
+		{
+			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>() {5,10});
+
+			var span = vehicle.TimeSpanFactory(vehicle.CurrentSpeed);
+
+			var distance = vehicle.DistanceTravelled(span, 25);
+
+
+
 
 		}
 	}
