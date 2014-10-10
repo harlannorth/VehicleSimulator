@@ -19,7 +19,7 @@ namespace VehicleSimulator
 		{
 
 			//create class
-			var vehicle = new VehicleSimulator.EmitPosition(30, new List<VehicleSimulator.WayPoint>() { .5, .5 });
+			var vehicle = new VehicleSimulator.EmitPosition(30, new List<VehicleSimulator.WayPoint>() { new WayPoint(.5, .5) });
 
 			//attach listener
 			var listen = new Listener(vehicle);
@@ -105,7 +105,7 @@ namespace VehicleSimulator
 		{
 
 			//create class
-			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>() { .5, .5 });
+			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>() { new WayPoint(.5, .5) });
 
 			//attach listener
 			var listen = new Listener(vehicle);
@@ -126,7 +126,7 @@ namespace VehicleSimulator
 		[TestCategory("Instant Test")]
 		public void TesttDistanceTravelledFunction()
 		{
-			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>() {5,10});
+			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>() { new WayPoint(5,10) });
 
 			var span = new TimeSpan(0,10,0);
 

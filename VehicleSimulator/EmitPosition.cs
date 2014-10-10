@@ -94,7 +94,7 @@ namespace VehicleSimulator
 		/// <summary>
 		/// The event we are emitting containing a set of Coordinates
 		/// </summary>
-		public event EventHandler<GeoCoordinate> NewCoordinate;
+		public event EventHandler<ICoordinate> NewCoordinate;
 
 		/// <summary>
 		/// functions that fires off the emission
@@ -102,7 +102,7 @@ namespace VehicleSimulator
 		/// </summary>
 		public virtual void Emit()
 		{
-			NewCoordinate(this, new GeoCoordinate());
+			NewCoordinate(this, new Coordinate());
 		}
 
 		/// <summary>

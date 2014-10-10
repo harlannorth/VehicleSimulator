@@ -9,7 +9,7 @@ namespace VehicleSimulator
 	/// <summary>
 	/// Class to subscribe to a vehicles events
 	/// </summary>
-	public class Listener
+	public class Listener : VehicleSimulator.ICoordinateListener
 	{
 		/// <summary>
 		/// Takes in a vehicle and listens to the events
@@ -19,7 +19,7 @@ namespace VehicleSimulator
 		{
 			CoordinateLog = string.Empty;
 			_vehicle = vehicle;
-			vehicle.NewCoordinate += new EventHandler<System.Device.Location.GeoCoordinate>(GotNewCoordinate);
+			vehicle.NewCoordinate += new EventHandler<ICoordinate>(GotNewCoordinate);
 		}
 
 		/// <summary>
@@ -37,7 +37,7 @@ namespace VehicleSimulator
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="coordinates"></param>
-		private void GotNewCoordinate(object sender, System.Device.Location.GeoCoordinate coordinates)
+		public void GotNewCoordinate(object sender, ICoordinate coordinates)
 		{
 			CoordinateLog += string.Format("{0} Got Coorindates \\n ", DateTime.UtcNow);
 			System.Diagnostics.Debugger.Log(0, "log", string.Format("{0} Got Coorindates \n", DateTime.UtcNow));
