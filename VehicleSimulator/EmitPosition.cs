@@ -59,7 +59,7 @@ namespace VehicleSimulator
 		/// Function that contains a loop that keeps giving updates on the vehicle's location
 		/// </summary>
 		/// <param name="cancel">a token to allow terminating the loop beyond the expected reasons</param>
-		public void Control(System.Threading.CancellationToken cancel)
+		public void Control()
 		{
 			double milesToNextWayPoint = 0;
 
@@ -78,13 +78,6 @@ namespace VehicleSimulator
 				}
 				while (milesToNextWayPoint > 0);
 			}
-			//as long as we haven't cancelled this speed
-			//while(!cancel.IsCancellationRequested)
-			//{
-			//	System.Threading.Thread.Sleep(_emissionWait);
-			//	MilesTravelled = MilesTravelled + DistanceTravelled(_emissionWait, CurrentSpeed);
-			//	Emit();
-			//}
 
 		}
 
@@ -92,7 +85,7 @@ namespace VehicleSimulator
 		{
 			double distancetravelled = 0;
 
-			distancetravelled = span.TotalSeconds * ((double)25/3600);
+			distancetravelled = span.TotalSeconds * ((double)speed/3600);
 
 			return distancetravelled;
 

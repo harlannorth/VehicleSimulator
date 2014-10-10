@@ -1,16 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
 
 namespace VehicleSimulator
 {
 	[TestClass]
 	public class UnitTest
 	{
+
+
+		/// <summary>
+		/// Tests starting a sehicle and that 
+		/// </summary>
+		[TestMethod]
+		[TestCategory("Test Takes Time")]
+		public void TestRecieveEmissionsAndChangeSpeed()
+		{
+
+			//create class
+			var vehicle = new VehicleSimulator.EmitPosition(30, new List<VehicleSimulator.WayPoint>() { .5, .5 });
+
+			//attach listener
+			var listen = new Listener(vehicle);
+
+
+			var factory = new System.Threading.Tasks.TaskFactory();
+
+			//start the vehicle
+			var task = factory.StartNew(() => vehicle.Control());
+
+			//wait 10 seconds
+			System.Threading.Thread.Sleep(30000);
+
+			
+			vehicle.ChangeSpeed(60);
+
+			//wait for the vehicle to finish
+			task.Wait();
+
+			//parse the listener's log to get the number of coordinate events that happened
+			Assert.IsTrue(listen.CoordinateLog.Split(" ".ToCharArray()).Where(str => str == "Got").Count() == 24);
+
+		}
+
+
+
+		/// <summary>
+		/// test to make sure the vehicle speed can be changed
+		/// </summary>
+		[TestMethod]
+		[TestCategory("Instant Test")]
+		public void CanUpdateVehicleSpeed()
+		{
+			var simulator = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>());
+
+			simulator.ChangeSpeed(30);
+
+			Assert.AreEqual(30, simulator.CurrentSpeed);
+
+		}
+
+
 		/// <summary>
 		/// test to make sure that the timespace object returns expected object
 		/// </summary>
 		[TestMethod]
+		[TestCategory("Instant Test")]
 		public void GetTimeSpans()
 		{
 			var simulator = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>());
@@ -40,68 +96,43 @@ namespace VehicleSimulator
 
 		}
 
+		/// <summary>
+		/// Tests starting a sehicle and that 
+		/// </summary>
 		[TestMethod]
-		public void RunAsTask()
-		{
-			var vehicle = new VehicleSimulator.EmitPosition(27, new List<VehicleSimulator.WayPoint>());
-
-			var cancel = new System.Threading.CancellationTokenSource();
-
-			//attach listener
-			var listen = new Listener(vehicle);
-
-			var task = new System.Threading.Tasks.Task(() => vehicle.Control(cancel.Token));
-
-			//if we are done issue cancel
-			cancel.Cancel();
-			task.Wait();
-
-		}
-
-		[TestMethod]
-		public void RecieveEmission()
+		[TestCategory("Test Takes Time")]
+		public void TestRecieveEmissions()
 		{
 
 			//create class
-			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>());
+			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>() { .5, .5 });
 
 			//attach listener
 			var listen = new Listener(vehicle);
+			
+			//start the vehicle
+			vehicle.Control();
 
-			vehicle.Control(new System.Threading.CancellationToken());
-
+			//parse the listener's log to get the number of coordinate events that happened
+			Assert.IsTrue(listen.CoordinateLog.Split(" ".ToCharArray()).Where(s => s == "Got").Count() == 16);
 		
 		}
 
-		public class Listener
-		{
-
-
-			public Listener(VehicleSimulator.EmitPosition vehicle)
-			{
-				_vehicle = vehicle;
-				vehicle.NewCoordinate += new EventHandler<System.Device.Location.GeoCoordinate>(GotNewCoordinate);
-			}
-
-			private VehicleSimulator.EmitPosition _vehicle;
-
-			private void GotNewCoordinate(object sender, System.Device.Location.GeoCoordinate coordinates)
-			{
-					System.Diagnostics.Debugger.Log(0, "log", string.Format("{0} Got Coorindates", DateTime.UtcNow));
-			}
-
-		}
-
+		/// <summary>
+		/// Tests that the function which calculates how far the vehicle travels at the given mph for the timespan
+		/// works correctly
+		/// </summary>
 		[TestMethod]
-		public void GetMilesTravelled()
+		[TestCategory("Instant Test")]
+		public void TesttDistanceTravelledFunction()
 		{
 			var vehicle = new VehicleSimulator.EmitPosition(25, new List<VehicleSimulator.WayPoint>() {5,10});
 
-			var span = vehicle.TimeSpanFactory(vehicle.CurrentSpeed);
+			var span = new TimeSpan(0,10,0);
 
-			var distance = vehicle.DistanceTravelled(span, 25);
+			var distance = vehicle.DistanceTravelled(span, 60);
 
-
+			Assert.AreEqual(10, distance);
 
 
 		}

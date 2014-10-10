@@ -17,7 +17,12 @@ namespace VehicleSimulator
 			return new WayPoint(i);
 		}
 
-		public WayPoint(int milesToNextWayPoint)
+		public static implicit operator WayPoint(double i)
+		{
+			return new WayPoint(i);
+		}
+
+		public WayPoint(double milesToNextWayPoint)
 		{
 			MileToNextWayPoint = milesToNextWayPoint;
 		}
@@ -25,6 +30,6 @@ namespace VehicleSimulator
 		/// <summary>
 		/// amount of distance until next waypoint
 		/// </summary>
-		public int MileToNextWayPoint { set;  get; }
+		public double MileToNextWayPoint { set;  get; }
 	}
 }
