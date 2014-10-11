@@ -15,7 +15,7 @@ namespace VehicleSimulator
 		/// Takes in a vehicle and listens to the events
 		/// </summary>
 		/// <param name="vehicle">The simulated vehicle</param>
-		public Listener(VehicleSimulator.EmitPosition vehicle)
+		public Listener(VehicleSimulator.Vehicle vehicle)
 		{
 			CoordinateLog = string.Empty;
 			_vehicle = vehicle;
@@ -30,7 +30,7 @@ namespace VehicleSimulator
 /// <summary>
 		/// Backing store for vehicle
 		/// </summary>
-		private VehicleSimulator.EmitPosition _vehicle;
+		private VehicleSimulator.Vehicle _vehicle;
 
 		/// <summary>
 		/// Event handler for the emitted data

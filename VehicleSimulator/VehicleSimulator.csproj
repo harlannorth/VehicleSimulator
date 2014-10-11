@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Coordinate.cs" />
-    <Compile Include="EmitPosition.cs" />
+    <Compile Include="Vehicle.cs" />
     <Compile Include="Interfaces\ICoordinate.cs" />
     <Compile Include="Interfaces\ICoordinateListener.cs" />
     <Compile Include="Interfaces\IWaypoint.cs" />

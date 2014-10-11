@@ -10,63 +10,72 @@ using System.Threading.Tasks;
 namespace VehicleSimulator
 {
 
-    public class EmitPosition
+    public class Vehicle
     {
 
 		/// <summary>
-		/// Constructor sets up the vehicle position emitting object
-		/// Takes in an initial speed
-		/// set the timespan to wait between emission based on that
+		/// Constructor sets up the vehicle t
+		/// Takes in an initial speed and a list of waypoints to travel through
 		/// </summary>
 		/// <param name="initialSpeed">Initial speed the vehicle is travelling at</param>
-		public EmitPosition(int initialSpeed, List<WayPoint> waypoints)
+		public Vehicle(int initialSpeed, List<WayPoint> waypoints)
 		{
-			//create event for when speed changes
-
-			_currentSpeed = initialSpeed;
-			_emissionWait = this.TimeSpanFactory(_currentSpeed);
-			_waypoints = waypoints;
+			ChangeSpeed(initialSpeed);
+			Waypoints = waypoints;
 			MilesTravelled = 0;
 		}
 
-		/// <summary>
-		/// the current speed of the vehicle
-		/// the 'Go' function uses this to calculate distance travelled
-		/// also used to determine how long to wait between emissions
-		/// </summary>
-		private int _currentSpeed;
 
 		/// <summary>
 		/// period to wait before giving a new location
 		/// </summary>
 		private TimeSpan _emissionWait;
 
+		/// <summary>
+		/// Number of Miles travelled 
+		/// </summary>
 		public double MilesTravelled { get; set; }
 
-		public int CurrentSpeed { get { return _currentSpeed; } }
+		/// <summary>
+		/// the current speed of the vehicle
+		/// the 'Go' function uses this to calculate distance travelled
+		/// also used to determine how long to wait between emissions
+		/// </summary>
+		public int CurrentSpeed { get; private set; }	
 
+		/// <summary>
+		/// Function to update the speed the vehicle is travelling at.
+		/// </summary>
+		/// <param name="newSpeed">New speed in MPH</param>
 		public void ChangeSpeed(int newSpeed)
 		{
-			_currentSpeed = newSpeed;
-			_emissionWait = this.TimeSpanFactory(_currentSpeed);
+			CurrentSpeed = newSpeed;
+			_emissionWait = TimeSpanFactory(CurrentSpeed);
 		}
 
-		public List<WayPoint> Waypoints { get { return _waypoints; } }
-
-		private List<WayPoint> _waypoints;
+		/// <summary>
+		/// List of points the vehicle will travel through
+		/// </summary>
+		public List<WayPoint> Waypoints { get; private set; }
 
 		/// <summary>
 		/// Function that contains a loop that keeps giving updates on the vehicle's location
 		/// </summary>
 		/// <param name="cancel">a token to allow terminating the loop beyond the expected reasons</param>
-		public void Control()
+		public void Drive()
 		{
 			double milesToNextWayPoint = 0;
 
-			foreach (WayPoint point in Waypoints)
-			{
+			IEnumerator<WayPoint> enumer = Waypoints.GetEnumerator();
 
-				milesToNextWayPoint = point.MileToNextWayPoint;
+			//loop until the second to last element
+			for (int i = 0; i <= Waypoints.Count()-2; i++)
+			{
+			
+				var currentPosition = Waypoints[i];
+				var nextPosition = Waypoints[i + 1];
+
+				milesToNextWayPoint = currentPosition.DistanceToNextWayPoint(nextPosition);
 
 				do
 				{
@@ -74,20 +83,10 @@ namespace VehicleSimulator
 					var travelled = DistanceTravelled(_emissionWait, CurrentSpeed);
 					milesToNextWayPoint = milesToNextWayPoint - travelled;
 					MilesTravelled = MilesTravelled + travelled;
-					Emit();
+					NewCoordinate(this, new Coordinate());
 				}
 				while (milesToNextWayPoint > 0);
 			}
-
-		}
-
-		public double DistanceTravelled(TimeSpan span, int speed)
-		{
-			double distancetravelled = 0;
-
-			distancetravelled = span.TotalSeconds * ((double)speed/3600);
-
-			return distancetravelled;
 
 		}
 
@@ -97,20 +96,11 @@ namespace VehicleSimulator
 		public event EventHandler<ICoordinate> NewCoordinate;
 
 		/// <summary>
-		/// functions that fires off the emission
-		/// Could be overridden to get different behavior 
-		/// </summary>
-		public virtual void Emit()
-		{
-			NewCoordinate(this, new Coordinate());
-		}
-
-		/// <summary>
 		/// Takes in a speed and returns how long to wait before emitting again
 		/// </summary>
 		/// <param name="speed">The speed of the vehicle</param>
 		/// <returns>TimeSpan object set to how long to wait until emitting location again</returns>
-		public TimeSpan TimeSpanFactory(int speed)
+		public static TimeSpan TimeSpanFactory(int speed)
 		{
 			//if we are travelling at less that 25 mph return every 9 seconds
  			if (speed <= 25)
@@ -127,6 +117,23 @@ namespace VehicleSimulator
 				return new TimeSpan(0, 0, 3);
 			}
 		}
+
+		/// <summary>
+		/// Get the distance, in miles, one travels in a peroid of time at a particular speed
+		/// </summary>
+		/// <param name="span"amount of time the travel is allowed to go on for</param>
+		/// <param name="speed">The speed at which the travel is happening</param>
+		/// <returns></returns>
+		public static double DistanceTravelled(TimeSpan span, int speed)
+		{
+			double distancetravelled = 0;
+
+			distancetravelled = span.TotalSeconds * ((double)speed / 3600);
+
+			return distancetravelled;
+
+		}
+
 
 
     }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Device.Location;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Device.Location;
 using VehicleSimulator.Interfaces;
 
 namespace VehicleSimulator
@@ -14,40 +9,40 @@ namespace VehicleSimulator
 	/// </summary>
 	public class WayPoint : IWaypoint
 	{
-		//public static implicit operator WayPoint(int lattitude, int longitude)
-		//{
-		//	return new WayPoint(lattitude, longitude);
-		//}
-
-		//public static implicit operator WayPoint(double lattitude, double longitude)
-		//{
-		//	return new WayPoint(lattitude, longitude);
-		//}
-
-		public WayPoint(double lattitude, double longitude)
+		/// <summary>
+		/// Constructor which takes in the longitude and latitude 
+		/// </summary>
+		/// <param name="latitude">Latitude of the waypoint</param>
+		/// <param name="longitude">Longitude of the Waypoint</param>
+		public WayPoint(double latitude, double longitude)
 		{
-			_position = new Coordinate() { Latitude = lattitude, Longitude = longitude };
+			Position = new Coordinate() { Latitude = latitude, Longitude = longitude };
 		}
 
 		/// <summary>
-		/// amount of distance until next waypoint
+		/// Function gets, in miles, the distance between two Waypoints
 		/// </summary>
-		public double MileToNextWayPoint { set;  get; }
-
+		/// <param name="otherWaypoint">Waypoint to look at</param>
+		/// <returns>Miles between the waypoints</returns>
 		public double DistanceToNextWayPoint(IWaypoint otherWaypoint)
 		{
-			var thisGeoCoordinate = new GeoCoordinate(_position.Latitude, _position.Longitude);
+			//using the system.device GeoCoordinate class calculate the distance
+			var thisGeoCoordinate = new GeoCoordinate(Position.Latitude, Position.Longitude);
 			var otherGeoCoordinate = new GeoCoordinate(otherWaypoint.Position.Latitude, otherWaypoint.Position.Longitude);
 
-			return thisGeoCoordinate.GetDistanceTo(otherGeoCoordinate);
+			//function does meters, change to miles
+			return thisGeoCoordinate.GetDistanceTo(otherGeoCoordinate) / 1609.344;
 
 		}
 
+		/// <summary>
+		/// Position of the Waypoint
+		/// </summary>
 		public ICoordinate Position
 		{
-			get { return _position; }
+			get;
+			private set;
 		}
 
-		private Coordinate _position;
 	}
 }
