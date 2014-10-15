@@ -14,10 +14,11 @@ namespace VehicleSimulator
     {
 
 		/// <summary>
-		/// Constructor sets up the vehicle t
+		/// Constructor sets up the vehicle 
 		/// Takes in an initial speed and a list of waypoints to travel through
 		/// </summary>
 		/// <param name="initialSpeed">Initial speed the vehicle is travelling at</param>
+		/// <param name="waypoints">A list of way points</param>
 		public Vehicle(int initialSpeed, List<WayPoint> waypoints)
 		{
 			ChangeSpeed(initialSpeed);
@@ -66,8 +67,6 @@ namespace VehicleSimulator
 		{
 			double milesToNextWayPoint = 0;
 
-			IEnumerator<WayPoint> enumer = Waypoints.GetEnumerator();
-
 			//loop until the second to last element
 			for (int i = 0; i <= Waypoints.Count()-2; i++)
 			{
@@ -75,14 +74,20 @@ namespace VehicleSimulator
 				var currentPosition = Waypoints[i];
 				var nextPosition = Waypoints[i + 1];
 
-				milesToNextWayPoint = currentPosition.DistanceToNextWayPoint(nextPosition);
+				milesToNextWayPoint = currentPosition.DistanceToNextWayPoint(nextPosition.Position);
 
+				//do this until we reach the waypoint
 				do
 				{
+					//wait for the vehicle to move the distance until it is time to emit a location again
 					System.Threading.Thread.Sleep(_emissionWait);
+					//find out how far was travelled 
 					var travelled = DistanceTravelled(_emissionWait, CurrentSpeed);
+					//update how far until the next waypoint is reached
 					milesToNextWayPoint = milesToNextWayPoint - travelled;
+					//update total miles travelled
 					MilesTravelled = MilesTravelled + travelled;
+					//emit the coordinates to any listeners (actual coordinates have not been calculated
 					NewCoordinate(this, new Coordinate());
 				}
 				while (milesToNextWayPoint > 0);

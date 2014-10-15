@@ -74,7 +74,7 @@ namespace VehicleSimulator
 	
 			var first = new VehicleSimulator.WayPoint(33.833769, -117);
 			var second = new VehicleSimulator.WayPoint(33.848219999999735, -117);
-			var diff = first.DistanceToNextWayPoint(second);
+			var diff = first.DistanceToNextWayPoint(second.Position);
 
 			Assert.AreEqual(System.Math.Round(diff,3,MidpointRounding.AwayFromZero), .999);
 
@@ -157,28 +157,28 @@ namespace VehicleSimulator
 		/// <summary>
 		/// Tests that we are getting the expected results from the Waypoint distance method
 		/// </summary>
-		[TestMethod]
-		[TestCategory("Data Generation")]
-		public void FindLat()
-		{
-			double updateLat = 33.833769;
-			double diff;
+		//[TestMethod]
+		//[TestCategory("Data Generation")]
+		//public void FindLat()
+		//{
+		//	double updateLat = 33.833769;
+		//	double diff;
 
-			do
-			{
+		//	do
+		//	{
 
-				updateLat = updateLat - .00001;
-				var first = new VehicleSimulator.WayPoint(33.833769, -117);
-				var second = new VehicleSimulator.WayPoint(updateLat, -117);
-				diff = first.DistanceToNextWayPoint(second);
+		//		updateLat = updateLat - .00001;
+		//		var first = new VehicleSimulator.WayPoint(33.833769, -117);
+		//		var second = new VehicleSimulator.WayPoint(updateLat, -117);
+		//		diff = first.DistanceToNextWayPoint(second.Position);
 
 
-			} while (diff < .5);
+		//	} while (diff < .5);
 
-			Console.WriteLine("New lat is: " + updateLat);
-			//Assert.AreEqual(System.Math.Round(diff, 3, MidpointRounding.AwayFromZero), .999);
+		//	Console.WriteLine("New lat is: " + updateLat);
+		//	//Assert.AreEqual(System.Math.Round(diff, 3, MidpointRounding.AwayFromZero), .999);
 
-		}
+		//}
 
 	}
 }

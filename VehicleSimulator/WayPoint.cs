@@ -22,13 +22,13 @@ namespace VehicleSimulator
 		/// <summary>
 		/// Function gets, in miles, the distance between two Waypoints
 		/// </summary>
-		/// <param name="otherWaypoint">Waypoint to look at</param>
+		/// <param name="otherPoint">Point to calculate distance to</param>
 		/// <returns>Miles between the waypoints</returns>
-		public double DistanceToNextWayPoint(IWaypoint otherWaypoint)
+		public double DistanceToNextWayPoint(ICoordinate otherPoint)
 		{
 			//using the system.device GeoCoordinate class calculate the distance
 			var thisGeoCoordinate = new GeoCoordinate(Position.Latitude, Position.Longitude);
-			var otherGeoCoordinate = new GeoCoordinate(otherWaypoint.Position.Latitude, otherWaypoint.Position.Longitude);
+			var otherGeoCoordinate = new GeoCoordinate(otherPoint.Latitude, otherPoint.Longitude);
 
 			//function does meters, change to miles
 			return thisGeoCoordinate.GetDistanceTo(otherGeoCoordinate) / 1609.344;

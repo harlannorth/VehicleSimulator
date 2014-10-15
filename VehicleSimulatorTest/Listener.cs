@@ -27,7 +27,7 @@ namespace VehicleSimulator
 		/// </summary>
 		public string CoordinateLog { get; private set; }
 
-/// <summary>
+		/// <summary>
 		/// Backing store for vehicle
 		/// </summary>
 		private VehicleSimulator.Vehicle _vehicle;
