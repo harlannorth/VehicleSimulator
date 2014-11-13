@@ -11,7 +11,7 @@ namespace VehicleSimulator
 
 
 		/// <summary>
-		/// Tests starting a sehicle and that 
+		/// Tests starting a vehicle and that changes in speed generate the correct number of emissions
 		/// </summary>
 		[TestMethod]
 		[TestCategory("Test Takes Time")]
@@ -115,7 +115,7 @@ namespace VehicleSimulator
 		}
 
 		/// <summary>
-		/// Tests starting a sehicle and that 
+		/// Tests starting a sehicle and that it emits the correct number of times without changing speeds
 		/// </summary>
 		[TestMethod]
 		[TestCategory("Test Takes Time")]
@@ -153,6 +153,46 @@ namespace VehicleSimulator
 
 
 		}
+
+		//[TestMethod]
+		//public void CanGetBearing()
+		//{
+		//	//Assert.AreEqual(,)
+		//}
+
+
+
+		//public void CanGet 
+
+		/// <summary>
+		/// Adpapted from http://www.movable-type.co.uk/scripts/latlong.html
+		/// </summary>
+		//[TestMethod]
+		//public void CalculateCoordinate()
+		//{
+		//	var R = 3959; //earth's radius in miles 
+
+		//	double distanceTravelled = 1 / 0.62137; //travelled in miles 
+
+
+		//	double brng = TravelCalculators.GetBearing(new Coordinate() { Latitude = 33.833769, Longitude = -117 }, new Coordinate() { Latitude = 33.82652, Longitude = -117 });
+
+		//	double startingLat = TravelCalculators.ConvertToRadians(33.833769);
+		//	double startingLong = TravelCalculators.ConvertToRadians (- 117);
+
+			
+
+		//	var newLatitude = Math.Asin(Math.Sin(startingLat) * Math.Cos(distanceTravelled / R) 
+		//		+ Math.Cos(startingLat) * Math.Sin(distanceTravelled / R) * Math.Cos(brng));
+		//	var newLongitude = startingLong + Math.Atan2(Math.Sin(brng) * Math.Sin(distanceTravelled / R) * Math.Cos(startingLat),
+		//							 Math.Cos(distanceTravelled / R) - Math.Sin(startingLat) * Math.Sin(newLatitude));
+
+		//	//Assert.AreEqual(,newLatitude);
+		//	//Assert.AreEqual(,newLongitude);
+
+		//}
+
+
 
 		/// <summary>
 		/// Tests that we are getting the expected results from the Waypoint distance method
